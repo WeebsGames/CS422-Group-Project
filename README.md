@@ -1,76 +1,34 @@
-# Homework: Events Finder — UI Programming (UI = f(state))
+GR4: Computer Prototyping
+In this group assignment, you will do the first computer-based implementation of your term project.
+You may want to use a prototyping tool for this assignment, such as an HTML editor. You don't necessarily have to throw this prototype away, so you can choose a tool that will produce code you can use in your final implementation. But you shouldn't get too attached to this prototype either, and be prepared to make radical changes or throw it away if the evaluation reveals serious usability problems.
+Building your prototype
+Your computer prototype should be:
+High fidelity in look. Use this prototype to explore the graphic design of your final implementation. Lay out screens as you want them to appear in your final implementation. Make choices about colors, fonts, alignment, icons, and white space.
+High fidelity in feel. This prototype should run on the web or natively in an OS, for example, in a recent version of one of the following desktop browsers: Chrome, Safari, Firefox. Make sure you indicate what browser/OS/version combination you have used.
+Low fidelity in breadth. Your prototype should include most of the primary features needed by your scenario from GR2, but doesn't need any features beyond that.
+Low fidelity in depth. You can leave out most of your backend. Where system responses are needed, make them canned (i.e., always the same) or random. Consider using static images (pixel-model output that you created in a drawing program) in places where the final implementation would have to draw on the fly (stroke-model or component-model). Use realistic data in your canned displays, however -- in particular, data of a realistic scale. If you were building (say) an MP3 player and your prototype displays only three songs in the user's library, that's pretty unrealistic, and won't adequately test your UI design choices.
+Here are some issues you should not worry about in this prototype:
+Window resizing. When a window is resized, its layout has to adjust to respond. Don't worry about this for now. Determine a good default size for your windows and design a good layout for that size (using either automatic layout or even absolute positioning). Your final implementation probably should support window resizing, depending on your application, but you should decide how to make your interface's default look as good as possible, before worrying about variation.
+Platform independence. Even though your final implementation will run on multiple platforms -- different browsers, different operating systems -- your prototype doesn't need to look good or work well everywhere. Focus on one platform for now.
+After you hand in your prototype, your classmates will do heuristic evaluations of it for assignment PS3 and give their reports back to you. 
+Since your evaluators must be able to view and interact with your prototype, this puts some constraints on how you implement your prototype. Depending upon its viability, you may need to schedule a videoconferencing session or send them an executable or URL. It is fine to require evaluators to use a particular web browser and OS to ensure the correct appearance and operation of your prototype (or even your own computer).
 
-## Goal
-Build a small state-driven interface in vanilla JavaScript that supports **search + filter + sort + feedback**.
+Deliverables
+Google Doc Project Report. Under the section "GR4 Computer Prototype" add the following sections:
+Platform details. Specify the platform and software requirements for your prototype.
+Instructions. Give brief, step-by-step instructions for starting up your prototype. A URL might be sufficient. 
+Shallow parts. Describe which parts of the prototype are shallow (incompletely implemented or canned), so that your evaluators know what should work and what shouldn't.
+Peer Evaluation Form. Complete your peer assessments and upload them in BlackBoard. Peer Evaluation Form
+Note that your prototype (or a version of your prototype) must remain frozen (i.e., with no changes) and accessible at the URL from you that you provide until grades are out.       
 
-You should practice the UI programming loop:
-**Events → update state → render UI → user sees feedback**
 
----
+Rubric
 
-## Getting started
 
-### Option A: VS Code + Live Server (recommended)
-1. Install VS Code.
-2. Install the extension **Live Server** (publisher: Ritwick Dey).
-3. Open this folder in VS Code.
-4. Right-click `index.html` → **Open with Live Server**.
+Documentation: (15%)
+Specify the platform and software requirements for your prototype. Give brief, step-by-step instructions for starting up your prototype. A URL might be sufficient.Describe which parts of the prototype are shallow (incompletely implemented or canned).
+Design continuation from GR3 (20%)
+You should be coding your prototype as a continuation of GR3, not from scratch. GR3 finind should be incorporated appropriately in GR4 implementation.
+Adequate implementation (65%)
+You are not required to implement a fully functional prototype with all planned UI functions, yet, in GR4. But you should implement 1 - 2 core functions of your solution, the most important aspects of your interface. For those 1 - 2 functions, the UI should provide all the steps that might be needed for the users to perform them. Some aesthetics improvement, in terms of graphic design, over GR3 prototypes will be expected.
 
-### Option B: No extension
-Double-click `index.html` to open it in your browser.
-(You will need to refresh the page after changes.)
-
----
-
-## Completion checklist (what to do)
-Work in `app.js` and do your best to implement the TODOs:
-
-- [ ] Implement `compareByDate(a, b)` (sort ascending/descending)
-- [ ] Implement `getVisibleEvents()` (filter + sort based on `state`)
-- [ ] Implement `render()` (status line + results list + empty state)
-- [ ] Implement `wireEvents()` (event listeners update `state` then call `render()`)
-
-### Architecture guideline (helps you succeed)
-- Keep truth in `state` (query, filter, sort).
-- Event handlers update state and call `render()`.
-- `render()` reads from state and updates the DOM.
-
----
-
-## Reflection (required — put answers in this README before submitting)
-Answer in 2–4 sentences each:
-
-1. **Learnability:** What feedback would you want the UI to show after user actions? Why does it help?
-2. **Efficiency:** What feature in this UI reduces effort/time for common tasks? Why?
-3. **Safety:** What would prevent confusion or errors? (e.g., empty state, clear status, preventing invalid states)
-
----
-
-## Submission (graded on completion)
-Submit these files:
-- `index.html`
-- `style.css`
-- `app.js`
-- `README.md` (with your reflection answers included)
-
-### Grading (completion-based)
-This homework is graded on **completion**, not correctness.
-- Full credit if you:
-  - made a sincere attempt at the TODOs in `app.js`, and
-  - included the reflection answers in `README.md`.
-
-If your code isn’t fully working, that’s okay — submit what you have. Your goal is to practice the mental model and identify what you’d fix next.
-
----
-
-## Optional exercises (not graded — for mastery)
-Pick any 1–3 if you want extra practice:
-
-1. **Persistence (+1 skill):** Save `{query, freeOnly, sort}` to `localStorage` on each change; restore on load.
-2. **Keyboard shortcut:** Press `/` to focus the search box.
-3. **Extra filter:** Add a venue dropdown filter generated from the data.
-4. **Async UI:** Simulate loading with a “Loading…” state for 500ms before showing results.
-5. **Safety upgrade:** Add a “Clear filters” button and show a confirmation *only* if it would discard typed input.
-6. **Accessibility upgrade:** Add a “Skip to results” link and ensure focus order is logical.
-
-(You don’t need to submit these; they’re for your own practice.)
