@@ -1,58 +1,454 @@
-.container {
-  max-width: 760px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-  font-family: system-ui, Arial, sans-serif;
+/* === Reset & Base === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.controls {
-  display: grid;
-  gap: 0.75rem;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+body {
+  font-family: 'Lato', system-ui, sans-serif;
+  background: #fff;
+  color: #222;
 }
 
-.row {
+/* === Navbar === */
+.navbar {
   display: flex;
-  gap: 0.5rem;
   align-items: center;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
 }
 
-.checkbox {
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-logo {
+  height: 40px;
+  width: auto;
+}
+
+.logo-fallback {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #c00;
+  display: flex;
+  align-items: center;
+}
+
+.nav-search-wrapper {
+  position: relative;
+}
+
+.nav-search {
+  padding: 0.45rem 2rem 0.45rem 0.75rem;
+  border: 1.5px solid #999;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-family: 'Lato', sans-serif;
+  width: 260px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.nav-search:focus {
+  border-color: #c00;
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  pointer-events: none;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.nav-btn {
+  padding: 0.5rem 3.5rem;
+  border: 1.5px solid #222;
+  border-radius: 6px;
+  background: #fff;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.nav-btn:hover {
+  background: #f2b8b8;
+}
+
+.create-btn {
+  color: #c00;
+  border-color: #c00;
+}
+
+.create-btn:hover {
+  background: #b8e6b8;
+}
+
+.profile-btn {
+  background: none;
+  border: 1.5px solid #222;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.profile-btn:hover {
+  background: #f5f5f5;
+}
+
+.profile-btn svg {
+  color: #222;
+}
+
+/* === Divider === */
+.nav-divider {
+  border: none;
+  border-top: 2px solid #222;
+  margin: 0 1rem;
+}
+
+/* === Main Content === */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 18rem 1rem 2rem;
+}
+
+.hero-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 1000;
+  font-size: 3rem;
+  color: #c00;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* === Hero Search === */
+.hero-search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+}
+
+.hero-search {
+  width: 100%;
+  padding: 0.65rem 2.5rem 0.65rem 1rem;
+  border: 1.5px solid #999;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-family: 'Lato', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.hero-search:focus {
+  border-color: #c00;
+}
+
+.hero-search-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  pointer-events: none;
+}
+
+/* === Profile Page === */
+.profile-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 3rem;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0.25rem;
+}
+
+.back-btn:hover {
+  opacity: 0.6;
+}
+
+.profile-page-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.8rem;
+}
+
+.section-divider {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 1.5rem 0;
+}
+
+.profile-top-row {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.profile-name {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 2.2rem;
+}
+
+.profile-role-badge {
+  padding: 0.4rem 1.75rem;
+  border: 1.5px solid #222;
+  border-radius: 4px;
+  font-size: 1.1rem;
   font-weight: 500;
 }
 
-input[type="text"] {
-  padding: 0.5rem;
-  width: min(420px, 100%);
+.edit-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0.25rem;
 }
 
-select {
-  padding: 0.4rem;
+.edit-btn:hover {
+  opacity: 0.6;
 }
 
-.results {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0 0;
-  display: grid;
+.profile-content {
+  display: flex;
+  gap: 4rem;
+}
+
+.profile-photo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 0.75rem;
 }
 
-.card {
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 0.75rem 1rem;
+.profile-photo-placeholder {
+  width: 300px;
+  height: 330px;
+  background: #ddd;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.muted {
+.change-photo-link {
+  font-size: 0.85rem;
   color: #555;
+  cursor: pointer;
 }
 
-.empty {
-  padding: 1rem;
-  border: 1px dashed #aaa;
+.change-photo-link:hover {
+  text-decoration: underline;
+}
+
+.profile-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-top: 0.5rem;
+}
+
+.profile-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.profile-field:hover {
+  background: #f5f5f5;
+}
+
+.field-label {
+  font-weight: 600;
+  font-size: 1.2rem;
+  white-space: nowrap;
+}
+
+.field-value {
+  width: 280px;
+  padding: 0.5rem 1rem;
+  background: #eee;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: #888;
+  text-align: center;
+}
+
+.field-value-filled {
+  color: #222;
+  background: #d4edda;
+}
+
+/* Clickable name and role */
+.profile-name {
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.profile-name:hover {
+  opacity: 0.6;
+}
+
+.profile-role-badge {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.profile-role-badge:hover {
+  background: #f0f0f0;
+}
+
+/* === Overlay === */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.overlay-panel {
+  background: #fff;
   border-radius: 12px;
+  width: 90%;
+  max-width: 420px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 1.5rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.overlay-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.overlay-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #555;
+  line-height: 1;
+}
+
+.overlay-close:hover {
+  color: #222;
+}
+
+.overlay-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.overlay-option-btn {
+  padding: 0.65rem 1rem;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.overlay-option-btn:hover {
+  background: #f5f5f5;
+  border-color: #999;
+}
+
+.overlay-option-btn.selected {
+  background: #d4edda;
+  border-color: #28a745;
+  font-weight: 600;
+}
+
+.overlay-text-input {
+  padding: 0.6rem 0.75rem;
+  border: 1.5px solid #999;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Lato', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.overlay-text-input:focus {
+  border-color: #c00;
+}
+
+.overlay-save-btn {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: #c00;
+  color: #fff;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.15s;
+}
+
+.overlay-save-btn:hover {
+  background: #a00;
 }
