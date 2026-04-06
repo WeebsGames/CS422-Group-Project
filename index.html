@@ -42,6 +42,99 @@
       </div>
     </main>
 
+    <!-- Search Page -->
+    <main class="search-page page" id="page-search" style="display:none;">
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <span class="filter-label">Filters:</span>
+        <div class="filter-tags" id="filter-tags">
+          <!-- Tags will go here later -->
+        </div>
+        <button class="filter-icon-btn" id="filter-icon-btn" aria-label="Open filters">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        </button>
+      </div>
+
+      <div class="search-content">
+        <!-- Left: Scrollable Listings -->
+        <div class="listings-panel" id="listings-panel">
+          <!-- Listings injected by JS -->
+        </div>
+
+        <!-- Right: Detail View -->
+        <div class="detail-panel" id="detail-panel">
+          <!-- Detail injected by JS -->
+        </div>
+      </div>
+    </main>
+
+    <!-- Filter Page -->
+    <main class="filter-page page" id="page-filters" style="display:none;">
+      <div class="filter-page-header">
+        <div class="filter-page-header-left">
+          <button class="back-btn" id="filter-back-btn" aria-label="Go back">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          </button>
+          <h2 class="filter-page-title">Filters</h2>
+        </div>
+        <button class="apply-btn" id="apply-filters-btn">Apply</button>
+      </div>
+
+      <hr class="section-divider" />
+
+      <p class="filter-selection-count" id="filter-selection-count">0 / 4 selected</p>
+
+      <div class="filter-categories">
+        <div class="filter-category">
+          <h3 class="filter-cat-title">Experience</h3>
+          <div class="filter-cat-options">
+            <button class="ftag ftag-teal" data-value="Beginner">Beginner</button>
+            <button class="ftag ftag-teal" data-value="Intermediate">Intermediate</button>
+            <button class="ftag ftag-teal" data-value="Advanced">Advanced</button>
+            <button class="ftag ftag-teal" data-value="Expert">Expert</button>
+          </div>
+        </div>
+        <div class="filter-category">
+          <h3 class="filter-cat-title">Length</h3>
+          <div class="filter-cat-options">
+            <button class="ftag ftag-teal" data-value="≤ 1 hour">≤ 1 hour</button>
+            <button class="ftag ftag-teal" data-value="1-2 hours">1 - 2 hours</button>
+            <button class="ftag ftag-teal" data-value="2-3 hours">2 - 3 hours</button>
+            <button class="ftag ftag-teal" data-value="3-5 hours">3 - 5 hours</button>
+          </div>
+        </div>
+        <div class="filter-category">
+          <h3 class="filter-cat-title">Frequency</h3>
+          <div class="filter-cat-options">
+            <button class="ftag ftag-orange" data-value="Daily">Daily</button>
+            <button class="ftag ftag-orange" data-value="Weekly">Weekly</button>
+            <button class="ftag ftag-orange" data-value="Bi-weekly">Bi-weekly</button>
+            <button class="ftag ftag-orange" data-value="Monthly">Monthly</button>
+          </div>
+        </div>
+        <div class="filter-category">
+          <h3 class="filter-cat-title">Edition</h3>
+          <div class="filter-cat-options">
+            <button class="ftag ftag-brown" data-value="5e (5th Edition)">5e (5th Edition)</button>
+            <button class="ftag ftag-brown" data-value="3.5e">3.5e</button>
+            <button class="ftag ftag-brown" data-value="Pathfinder 1e/2e">Pathfinder 1e/2e</button>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+      <div class="filter-category filter-category-wide">
+        <h3 class="filter-cat-title">Distance</h3>
+        <div class="filter-cat-options filter-cat-options-row">
+          <button class="ftag ftag-yellow" data-value="≤ 1 mile away">≤ 1 mile away</button>
+          <button class="ftag ftag-yellow" data-value="1-2 miles away">1-2 miles away</button>
+          <button class="ftag ftag-yellow" data-value="2-5 miles away">2-5 miles away</button>
+          <button class="ftag ftag-yellow" data-value="5-10 miles away">5-10 miles away</button>
+        </div>
+      </div>
+    </main>
+
     <!-- Profile Page -->
     <main class="profile-page page" id="page-profile" style="display:none;">
       <div class="profile-header">

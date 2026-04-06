@@ -22,10 +22,144 @@ const OPTIONS = {
   ],
 };
 
+// --- Mock Listings Data ---
+const LISTINGS = [
+  {
+    id: 1,
+    name: "Shadow Garden",
+    description: "We lurk in the shadows to destroy the corrupt. Our group is focused on hype moments and aura. Join if you like aura farming.",
+    tags: ["Expert", "3-5 hours", "Weekly", "5e (5th Edition)"],
+    dm: "DarkLord99",
+    members: ["Ren", "Kai", "Sora"],
+    location: "Online",
+    schedule: "Weekday Evenings",
+    commitment: "Dedicated",
+    playStyle: "Roleplay Heavy",
+    experience: "Veteran",
+  },
+  {
+    id: 2,
+    name: "Arthur's Knights",
+    description: "A beginner friendly group. We play as only knights and knight related classes. Chivalry above all!",
+    tags: ["Beginner", "2-3 hours", "Weekly", "5e (5th Edition)", "≤ 1 mile away"],
+    dm: "SirLancelot",
+    members: ["Gwen", "Percy", "Merlin", "Elaine"],
+    location: "Chicago, IL",
+    schedule: "Weekend Afternoons",
+    commitment: "Weekly",
+    playStyle: "Balanced",
+    experience: "Beginner",
+  },
+  {
+    id: 3,
+    name: "Over Stars",
+    description: "We host space themed D&D sessions! All experience levels welcome. Explore the cosmos with us.",
+    tags: ["Beginner", "1-2 hours", "Bi-weekly", "5e (5th Edition)"],
+    dm: "CosmicDM",
+    members: ["Luna", "Orion"],
+    location: "Online",
+    schedule: "Weekend Evenings",
+    commitment: "Casual",
+    playStyle: "Exploration Focused",
+    experience: "Beginner",
+  },
+  {
+    id: 4,
+    name: "Generic Group Sixty Seven",
+    description: "67.",
+    tags: ["Intermediate", "1-2 hours", "Monthly", "5e (5th Edition)"],
+    dm: "ChillDM",
+    members: ["Alex", "Jordan", "Sam", "Riley", "Quinn"],
+    location: "Online",
+    schedule: "Flexible",
+    commitment: "Semi-Regular",
+    playStyle: "Balanced",
+    experience: "Intermediate",
+  },
+  {
+    id: 5,
+    name: "It's Always Sunny in Baldurs Gate",
+    description: "Hardcore players wanted. high difficulty campaigns with permadeath rules.",
+    tags: ["Expert", "3-5 hours", "Weekly", "5e (5th Edition)", "1-2 miles away"],
+    dm: "TPKMaster",
+    members: ["Charlie", "Mac", "Dennis"],
+    location: "Evanston, IL",
+    schedule: "Weekday Evenings",
+    commitment: "Hardcore",
+    playStyle: "Combat Heavy",
+    experience: "Veteran",
+  },
+  {
+    id: 6,
+    name: "Not so solo leveling",
+    description: "A aura first group that loves hype moments and aura. We hate good writing",
+    tags: ["Intermediate", "2-3 hours", "Weekly", "5e (5th Edition)"],
+    dm: "Narrator",
+    members: ["Bria", "Fenwick", "Talia", "Dorian"],
+    location: "Online",
+    schedule: "Weekday Evenings",
+    commitment: "Weekly",
+    playStyle: "Story Driven",
+    experience: "Intermediate",
+  },
+  {
+    id: 7,
+    name: "looking for new players",
+    description: "Brand new to D&D? This is the place. We teach the rules as we go and keep things super beginner friendly.",
+    tags: ["Beginner", "≤ 1 hour", "Bi-weekly", "5e (5th Edition)"],
+    dm: "PatientDM",
+    members: ["Newbie1", "Newbie2"],
+    location: "Online",
+    schedule: "Weekend Mornings",
+    commitment: "Casual",
+    playStyle: "Balanced",
+    experience: "Brand New",
+  },
+  {
+    id: 8,
+    name: "OnlyHands",
+    description: "A campaign that ONLY casts Mage Hand. DON'T PICK A CLASS THAT CAN'T LEARN MAGE HAND.",
+    tags: ["Intermediate", "2-3 hours", "Weekly", "5e (5th Edition)", "2-5 miles away"],
+    dm: "RangerRick",
+    members: ["Scout", "Tracker", "Willow", "Birch"],
+    location: "Oak Park, IL",
+    schedule: "Weekend Afternoons",
+    commitment: "Weekly",
+    playStyle: "Exploration Focused",
+    experience: "Intermediate",
+  },
+  {
+    id: 9,
+    name: "Try hard builds only",
+    description: "Play the meta or don't play at all.",
+    tags: ["Advanced", "1-2 hours", "Monthly", "3.5e"],
+    dm: "RotatingDM",
+    members: ["Various"],
+    location: "Online",
+    schedule: "Flexible",
+    commitment: "Casual",
+    playStyle: "Balanced",
+    experience: "Beginner",
+  },
+  {
+    id: 10,
+    name: "Critical Chaos",
+    description: "High energy, combat-heavy sessions with tons of homebrew rules.",
+    tags: ["Advanced", "3-5 hours", "Weekly", "Pathfinder 1e/2e"],
+    dm: "CritFisher",
+    members: ["Bash", "Slash", "Zap", "Boom", "Heal"],
+    location: "Online",
+    schedule: "Weekday Afternoons",
+    commitment: "Weekly",
+    playStyle: "Combat Heavy",
+    experience: "Experienced",
+  },
+];
+
 // --- State ---
 const state = {
   query: "",
-  page: "home",
+  page: "home", // home, search, filters, profile
   profile: {
     name: "",
     role: "",
@@ -37,7 +171,14 @@ const state = {
   },
   overlay: {
     open: false,
-    field: null, // which field is being edited
+    field: null,
+  },
+  search: {
+    selectedListingId: 1,
+  },
+  filters: {
+    active: [],   // applied filters shown in filter bar
+    pending: [],  // selections on filter page before Apply
   },
 };
 
@@ -50,7 +191,16 @@ const els = {
   profileBtn: document.querySelector("#profile-btn"),
   backBtn: document.querySelector("#back-btn"),
   pageHome: document.querySelector("#page-home"),
+  pageSearch: document.querySelector("#page-search"),
+  pageFilters: document.querySelector("#page-filters"),
   pageProfile: document.querySelector("#page-profile"),
+  listingsPanel: document.querySelector("#listings-panel"),
+  detailPanel: document.querySelector("#detail-panel"),
+  filterTags: document.querySelector("#filter-tags"),
+  filterIconBtn: document.querySelector("#filter-icon-btn"),
+  filterBackBtn: document.querySelector("#filter-back-btn"),
+  applyFiltersBtn: document.querySelector("#apply-filters-btn"),
+  filterSelectionCount: document.querySelector("#filter-selection-count"),
   overlay: document.querySelector("#overlay"),
   overlayTitle: document.querySelector("#overlay-title"),
   overlayBody: document.querySelector("#overlay-body"),
@@ -74,12 +224,26 @@ const FIELD_LABELS = {
 function render() {
   // Show/hide pages
   els.pageHome.style.display = state.page === "home" ? "flex" : "none";
+  els.pageSearch.style.display = state.page === "search" ? "block" : "none";
+  els.pageFilters.style.display = state.page === "filters" ? "block" : "none";
   els.pageProfile.style.display = state.page === "profile" ? "block" : "none";
 
   // Sync search
   els.navSearch.value = state.query;
   if (state.page === "home") {
     els.heroSearch.value = state.query;
+  }
+
+  // Render search page
+  if (state.page === "search") {
+    renderListings();
+    renderDetail();
+    renderFilterBar();
+  }
+
+  // Render filter page selections
+  if (state.page === "filters") {
+    renderFilterPage();
   }
 
   // Update profile display values
@@ -110,6 +274,100 @@ function render() {
   }
 }
 
+// --- Render Listings ---
+function renderListings() {
+  els.listingsPanel.innerHTML = "";
+
+  // Filter listings by active tags
+  let filtered = LISTINGS;
+  if (state.filters.active.length > 0) {
+    filtered = LISTINGS.filter((l) => {
+      return state.filters.active.some((tag) => l.tags.includes(tag));
+    });
+  }
+
+  if (filtered.length === 0) {
+    els.listingsPanel.innerHTML = '<div class="listings-empty">No groups match your filters.</div>';
+    return;
+  }
+
+  // If selected listing isn't in filtered results, select the first one
+  if (!filtered.find((l) => l.id === state.search.selectedListingId)) {
+    state.search.selectedListingId = filtered[0].id;
+  }
+
+  filtered.forEach((listing) => {
+    const card = document.createElement("div");
+    card.className = "listing-card";
+    if (listing.id === state.search.selectedListingId) {
+      card.classList.add("listing-card-active");
+    }
+
+    card.innerHTML = `
+      <h3 class="listing-name">${listing.name}</h3>
+      <p class="listing-desc">${listing.description}</p>
+      <div class="listing-tags">
+        ${listing.tags.map((t) => `<span class="listing-tag">${t}</span>`).join("")}
+      </div>
+    `;
+
+    card.addEventListener("click", () => {
+      state.search.selectedListingId = listing.id;
+      render();
+    });
+
+    els.listingsPanel.appendChild(card);
+  });
+}
+
+// --- Render Detail Panel ---
+function renderDetail() {
+  const listing = LISTINGS.find((l) => l.id === state.search.selectedListingId);
+  if (!listing) {
+    els.detailPanel.innerHTML = '<div class="detail-empty">Select a group to see details.</div>';
+    return;
+  }
+
+  // Build member circles (grey dots)
+  const memberCircles = listing.members.map(() => `<span class="member-circle"></span>`).join("");
+
+  els.detailPanel.innerHTML = `
+    <h2 class="detail-name">${listing.name}</h2>
+    <div class="detail-row">
+      <span class="detail-label">DM</span>
+      <span class="detail-value"><span class="dm-crown">&#128081;</span> <span class="member-circle"></span></span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Members</span>
+      <span class="detail-value">${memberCircles}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Location</span>
+      <span class="detail-value">${listing.location}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Schedule</span>
+      <span class="detail-value">${listing.schedule}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Commitment level</span>
+      <span class="detail-value">${listing.commitment}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Play style</span>
+      <span class="detail-value">${listing.playStyle}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Experience</span>
+      <span class="detail-value">${listing.experience}</span>
+    </div>
+    <div class="detail-action">
+      <button class="request-join-btn">Request to join</button>
+    </div>
+  `;
+}
+
+// --- Render Overlay ---
 function renderOverlay() {
   const field = state.overlay.field;
   els.overlayTitle.textContent = "Select " + FIELD_LABELS[field];
@@ -135,7 +393,6 @@ function renderOverlay() {
       render();
     });
 
-    // Allow enter key to save
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         saveBtn.click();
@@ -144,8 +401,6 @@ function renderOverlay() {
 
     els.overlayBody.appendChild(input);
     els.overlayBody.appendChild(saveBtn);
-
-    // Auto-focus the input
     setTimeout(() => input.focus(), 50);
     return;
   }
@@ -159,7 +414,6 @@ function renderOverlay() {
     btn.className = "overlay-option-btn";
     btn.textContent = option;
 
-    // Highlight current selection
     if (state.profile[field] === option) {
       btn.classList.add("selected");
     }
@@ -182,17 +436,64 @@ function openOverlay(field) {
   render();
 }
 
+// --- Render Filter Bar (tags on search page) ---
+function renderFilterBar() {
+  els.filterTags.innerHTML = "";
+  state.filters.active.forEach((tag) => {
+    const span = document.createElement("span");
+    span.className = "filter-bar-tag";
+    span.textContent = tag;
+
+    const removeBtn = document.createElement("span");
+    removeBtn.className = "filter-bar-tag-remove";
+    removeBtn.textContent = "×";
+    removeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      state.filters.active = state.filters.active.filter((t) => t !== tag);
+      render();
+    });
+
+    span.appendChild(removeBtn);
+    els.filterTags.appendChild(span);
+  });
+}
+
+// --- Render Filter Page ---
+function renderFilterPage() {
+  // Update count
+  els.filterSelectionCount.textContent = state.filters.pending.length + " / 4 selected";
+
+  // Update button states
+  document.querySelectorAll("#page-filters .ftag").forEach((btn) => {
+    const val = btn.getAttribute("data-value");
+    if (state.filters.pending.includes(val)) {
+      btn.classList.add("ftag-selected");
+    } else {
+      btn.classList.remove("ftag-selected");
+    }
+  });
+}
+
+// --- Navigate to search ---
+function goToSearch() {
+  state.page = "search";
+  render();
+}
+
 // --- Event Listeners ---
 function wireEvents() {
-  // Search sync
-  els.navSearch.addEventListener("input", (e) => {
-    state.query = e.target.value;
-    render();
+  // Nav search — clicking goes to search page
+  els.navSearch.addEventListener("focus", () => {
+    goToSearch();
   });
 
-  els.heroSearch.addEventListener("input", (e) => {
+  els.navSearch.addEventListener("input", (e) => {
     state.query = e.target.value;
-    render();
+  });
+
+  // Hero search — clicking goes to search page
+  els.heroSearch.addEventListener("focus", () => {
+    goToSearch();
   });
 
   // Page navigation
@@ -206,11 +507,10 @@ function wireEvents() {
     render();
   });
 
-  // Profile field clicks — name and role in top row
+  // Profile field clicks
   els.displayName.addEventListener("click", () => openOverlay("name"));
   els.displayRole.addEventListener("click", () => openOverlay("role"));
 
-  // Profile field clicks — the five fields
   document.querySelectorAll(".profile-field[data-field]").forEach((el) => {
     el.addEventListener("click", () => {
       const field = el.getAttribute("data-field");
@@ -225,7 +525,6 @@ function wireEvents() {
     render();
   });
 
-  // Close overlay on background click
   els.overlay.addEventListener("click", (e) => {
     if (e.target === els.overlay) {
       state.overlay.open = false;
@@ -234,7 +533,43 @@ function wireEvents() {
     }
   });
 
-  // Placeholder nav buttons
+  // --- Filter Page ---
+  // Open filter page
+  els.filterIconBtn.addEventListener("click", () => {
+    state.filters.pending = [...state.filters.active]; // copy current active into pending
+    state.page = "filters";
+    render();
+  });
+
+  // Filter back button (discard changes)
+  els.filterBackBtn.addEventListener("click", () => {
+    state.page = "search";
+    render();
+  });
+
+  // Apply filters
+  els.applyFiltersBtn.addEventListener("click", () => {
+    state.filters.active = [...state.filters.pending];
+    state.page = "search";
+    render();
+  });
+
+  // Filter tag selection (toggle)
+  document.querySelectorAll("#page-filters .ftag").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const val = btn.getAttribute("data-value");
+      if (state.filters.pending.includes(val)) {
+        // Deselect
+        state.filters.pending = state.filters.pending.filter((t) => t !== val);
+      } else if (state.filters.pending.length < 4) {
+        // Select (max 4)
+        state.filters.pending.push(val);
+      }
+      renderFilterPage();
+    });
+  });
+
+  // Nav buttons
   els.myGroupsBtn.addEventListener("click", () => {
     console.log("Navigate to My Groups");
   });
