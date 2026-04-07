@@ -324,6 +324,7 @@ function render() {
 }
 
 function renderMyGroups() {
+  //joined changes based on the filter selection
   let joined = state.joinedGroupIds
     .map(id => LISTINGS.find(l => l.id === id))
     .filter(Boolean);
@@ -334,6 +335,7 @@ function renderMyGroups() {
     );
   }
 
+  //dynamic 'no groups' text
   const emptyMessage = joined.length === 0
     ? state.filters.active.length > 0
       ? "No joined groups match your filters."
@@ -386,6 +388,7 @@ function renderMyGroups() {
     });
   });
 
+  //filter button logic for myGroups page
   const myGroupsFilterBtn = document.getElementById("my-groups-filter-btn");
   if (myGroupsFilterBtn) {
     myGroupsFilterBtn.addEventListener("click", () => {
