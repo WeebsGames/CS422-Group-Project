@@ -777,3 +777,252 @@ body {
 .ftag-yellow {
   background: #e6b800;
 }
+
+/* My group */
+.group-page {
+  padding: 20px 40px;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid black;
+  padding-bottom: 10px;
+  margin-left: -40px;
+  margin-right: -40px;
+}
+
+.group-title {
+  margin-right: auto;
+  font-size: 28px;
+  font-weight: 700;
+  margin-left: 20px;
+}
+
+.group-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.icon-btn {
+  background: none;
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.group-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+/* LEFT */
+.group-about p {
+  color: #555;
+}
+
+.group-tags {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.tag {
+  border: 1px solid black;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+/* MEMBERS */
+.group-members {
+  margin-top: 30px;
+}
+
+.member {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #aaa;
+  border-radius: 50%;
+}
+
+.role-btn {
+  margin-left: auto;
+  border: 1px solid #999;
+  padding: 6px 14px;
+  border-radius: 6px;
+  background: white;
+  border: 1px solid black;
+  font-size: 16px;
+}
+
+.role-btn.dm {
+  font-weight: bold;
+}
+
+/* RIGHT */
+.calendar-box {
+  border: 1px solid #ccc;
+  padding: 16px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.calendar-grid span {
+  padding: 8px;
+  text-align: center;
+  border-radius: 6px;
+}
+
+.calendar-grid .active {
+  background: black;
+  color: white;
+}
+
+.upcoming-box {
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  padding: 16px;
+}
+
+.event {
+  margin-bottom: 12px;
+}
+
+/* My Groups */
+.my-groups-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid black;
+  padding-bottom: 10px;
+}
+
+.group-members {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;          /* space between avatar + name + role */
+}
+
+.my-groups-list {
+  margin-top: 20px;
+  margin-right: 500px;
+}
+
+.my-group-card {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+  padding: 20px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.my-group-left {
+  max-width: 60%;
+}
+
+.my-group-right ul {
+  list-style: disc;
+}
+
+.filter-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  fill: none;
+  stroke: currentColor;
+  margin-right: 30px;
+}
+
+.filter-btn svg {
+  width: 40px;
+  height: 40px;
+}
+
+.my-groups-title {
+  margin-left: 50px;
+}
+
+.group-event {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.star-icon {
+  width: 16px;
+  height: 16px;
+  color: black;
+  fill:none;
+  stroke: currentColor;
+}
+
+.group-left {
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+}
+
+.member {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  fill:none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.icon-btn svg {
+  width: 30px;
+  height: 30px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  fill:none;
+  stroke: currentColor;
+  stroke-width: 2px;
+}
+
+.back-btn svg {
+  width: 22px;
+  height: 22px;
+}

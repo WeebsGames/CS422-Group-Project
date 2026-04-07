@@ -159,7 +159,7 @@ const LISTINGS = [
 // --- State ---
 const state = {
   query: "",
-  page: "home", // home, search, filters, profile
+  page: "home", // home, search, filters, profile, my group listings, group page
   profile: {
     name: "",
     role: "",
@@ -180,6 +180,10 @@ const state = {
     active: [],   // applied filters shown in filter bar
     pending: [],  // selections on filter page before Apply
   },
+  group: {
+    selectedGroup: null,
+  },
+  
 };
 
 // --- Element References ---
@@ -207,6 +211,8 @@ const els = {
   overlayClose: document.querySelector("#overlay-close"),
   displayName: document.querySelector("#display-name"),
   displayRole: document.querySelector("#display-role"),
+  pageGroup: document.querySelector("#page-group"),
+  pageGroupListing: document.querySelector("#group-listing"),
 };
 
 // --- Field display names ---
@@ -227,6 +233,8 @@ function render() {
   els.pageSearch.style.display = state.page === "search" ? "block" : "none";
   els.pageFilters.style.display = state.page === "filters" ? "block" : "none";
   els.pageProfile.style.display = state.page === "profile" ? "block" : "none";
+  els.pageGroup.style.display = state.page === "group" ? "block" : "none";
+  els.pageGroupListing.style.display = state.page === "myGroups" ? "block" : "none";
 
   // Sync search
   els.navSearch.value = state.query;
@@ -244,6 +252,16 @@ function render() {
   // Render filter page selections
   if (state.page === "filters") {
     renderFilterPage();
+  }
+
+  // Render group page
+  if (state.page === "group") {
+    renderGroup();
+  }
+
+  // Render my groups page
+  if (state.page === "myGroups") {
+    renderMyGroups();
   }
 
   // Update profile display values
@@ -272,6 +290,161 @@ function render() {
   } else {
     els.overlay.style.display = "none";
   }
+}
+
+function renderMyGroups() {
+  els.pageGroupListing.innerHTML = `
+    <div class="my-groups-header">
+      <h1 class="my-groups-title">My Groups</h1>
+      <button class="filter-btn">
+        <svg xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="my-groups-list">
+      ${LISTINGS.slice(0, 2).map(group => `
+        <div class="my-group-card" data-id="${group.id}">
+          <div class="my-group-left">
+            <h3>${group.name}</h3>
+            <p>${group.description}</p>
+          </div>
+
+          <div class="my-group-right">
+            <ul>
+              <li>${group.experience === "Veteran" ? "Experienced Only" : group.experience}</li>
+              <li>${group.commitment}</li>
+              <li>${group.location === "Online" ? "Online" : "In-Person"}</li>
+            </ul>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  // open group
+  document.querySelectorAll(".my-group-card").forEach(card => {
+    card.addEventListener("click", () => {
+      const id = Number(card.getAttribute("data-id"));
+      const group = LISTINGS.find(l => l.id === id);
+
+      state.group.selectedGroup = group;
+      state.page = "group";
+      render();
+    });
+  });
+}
+
+function renderGroup() {
+  const group = state.group.selectedGroup;
+  if (!group) return;
+
+  els.pageGroup.innerHTML = `
+    <div class="group-header">
+      <button class="back-btn" id="group-back-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+      </button>
+      <h2 class="group-title">${group.name}</h2>
+      <div class="group-actions">
+        <button class="icon-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M17 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M7 21v-2a4 4 0 0 1 3-3.87"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </button>
+        <button class="icon-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" 
+              viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="15" height="10" rx="2"/>
+            <polygon points="17 12 22 9 22 15 17 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="group-layout">
+      <div class="group-left">
+
+        <section class="group-about">
+          <h3>About Us</h3>
+          <p>${group.description}</p>
+
+          <div class="group-tags">
+            ${group.tags.map(t => `<span class="tag">${t}</span>`).join("")}
+          </div>
+        </section>
+
+        <section class="group-members">
+          <h3>Members</h3>
+
+          <div class="member">
+            <div class="member-circle"></div>
+            <span>${group.dm}</span>
+            <button class="role-btn dm">👑 DM</button>
+          </div>
+
+          ${group.members.map(m => `
+            <div class="member">
+              <div class="member-circle"></div>
+              <span>${m}</span>
+              <button class="role-btn">Player</button>
+            </div>
+          `).join("")}
+
+        </section>
+
+      </div>
+
+      <div class="group-right">
+        <h3>Campaign Calendar</h3>
+        <div class="calendar-box">
+          <div class="calendar-grid">
+            ${[...Array(14)].map((_, i) => `
+              <span class="${[8,12].includes(i) ? "active" : ""}">
+                ${i+1}
+              </span>
+            `).join("")}
+          </div>
+        </div>
+
+        <div class="upcoming-box">
+          <h4>Upcoming Campaigns</h4>
+
+          <div class="group-event">
+            <svg class="star-icon" xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3 7h7l-5.5 5 2 7-6.5-4-6.5 4 2-7L2 9h7z"/>
+            </svg>
+            September 9 <br>
+            <small>${group.location}</small>
+          </div>
+          <div class="group-event">
+            <svg class="star-icon" xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3 7h7l-5.5 5 2 7-6.5-4-6.5 4 2-7L2 9h7z"/>
+            </svg>
+            September 13 <br>
+            <small>${group.location}</small>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  `;
+
+  // back button
+  document.getElementById("group-back-btn").addEventListener("click", () => {
+    state.page = "myGroups";
+    render();
+  });
 }
 
 // --- Render Listings ---
@@ -571,7 +744,8 @@ function wireEvents() {
 
   // Nav buttons
   els.myGroupsBtn.addEventListener("click", () => {
-    console.log("Navigate to My Groups");
+    state.page = "myGroups";
+    render();
   });
 
   els.createBtn.addEventListener("click", () => {
