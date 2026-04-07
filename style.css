@@ -1026,3 +1026,380 @@ body {
   width: 22px;
   height: 22px;
 }
+/* ===== Chat Page ===== */
+.chat-page {
+  padding: 20px 40px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 80px);
+  box-sizing: border-box;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.chat-msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 70%;
+}
+
+.chat-msg.theirs {
+  align-self: flex-start;
+}
+
+.chat-msg.mine {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.chat-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #fff;
+  position: relative;
+}
+
+.chat-avatar svg {
+  width: 26px;
+  height: 26px;
+  stroke: #333;
+  fill: none;
+  stroke-width: 1.8;
+}
+
+.chat-avatar .crown {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+}
+
+.chat-bubble {
+  background: #d9d9d9;
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: #222;
+  word-wrap: break-word;
+}
+
+.chat-msg.mine .chat-bubble {
+  background: #c8e6c9;
+}
+
+.chat-input-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 8px;
+  border-top: 2px solid #000;
+  margin-left: -40px;
+  margin-right: -40px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.chat-plus-btn,
+.chat-send-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+}
+
+.chat-plus-btn svg,
+.chat-send-btn svg {
+  width: 28px;
+  height: 28px;
+}
+
+.chat-text-input {
+  flex: 1;
+  border: 1.5px solid #bbb;
+  border-radius: 22px;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+}
+
+.chat-text-input:focus {
+  border-color: #888;
+}
+
+/* === Create Group Page === */
+.create-group-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 3rem;
+}
+
+.create-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.create-group-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.create-group-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.create-group-btn {
+  padding: 0.65rem 2rem;
+  border: 1.5px solid #c00;
+  border-radius: 6px;
+  background: #fff;
+  color: #222;
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.create-group-btn:hover {
+  background: #b8e6b8;
+  color: #222;
+}
+
+.create-group-content {
+  display: flex;
+  gap: 4rem;
+  margin-top: 1rem;
+}
+
+.create-group-left {
+  flex: 1.3;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.create-group-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cg-field {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cg-label {
+  font-weight: 600;
+  font-size: 1rem;
+  width: 100px;
+}
+
+.cg-input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  background: #eee;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.cg-input:focus {
+  border-color: #c00;
+  background: #fff;
+}
+
+.cg-section-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}
+
+.cg-center {
+  text-align: center;
+}
+
+.cg-mt {
+  margin-top: 1.5rem;
+}
+
+.cg-tags-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.cg-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+}
+
+.cg-tag {
+  padding: 0.4rem 1rem;
+  border: 1px solid #222;
+  border-radius: 16px;
+  background: #f0f0f0;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cg-tag:hover {
+  background: #ddd;
+}
+
+.cg-tag.cg-tag-selected {
+  background: #d4edda;
+  border-color: #28a745;
+}
+
+.cg-members-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.cg-search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+}
+
+.cg-search-input {
+  width: 100%;
+  padding: 0.55rem 2.5rem 0.55rem 1rem;
+  border: 1.5px solid #999;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-family: 'Lato', sans-serif;
+  outline: none;
+}
+
+.cg-search-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  pointer-events: none;
+}
+
+/* Calendar */
+.cg-calendar-placeholder {
+  border: 1.5px solid #222;
+  border-radius: 6px;
+  padding: 0.75rem;
+  width: 280px;
+}
+
+.cg-calendar-header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.cg-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+  text-align: center;
+}
+
+.cg-cal-day-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #555;
+  padding: 0.25rem 0;
+}
+
+.cg-cal-day {
+  font-size: 0.85rem;
+  padding: 0.3rem 0;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.cg-cal-day:hover {
+  background: #f0f0f0;
+}
+
+/* Session Length */
+.cg-session-length {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cg-arrow {
+  font-size: 1.2rem;
+  color: #888;
+  cursor: pointer;
+}
+
+.cg-length-btn {
+  padding: 0.4rem 0.85rem;
+  border: 1.5px solid #222;
+  background: #fff;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cg-length-btn:first-of-type {
+  border-radius: 6px 0 0 6px;
+}
+
+.cg-length-btn:last-of-type {
+  border-radius: 0 6px 6px 0;
+}
+
+.cg-length-btn + .cg-length-btn {
+  border-left: none;
+}
+
+.cg-length-btn:hover {
+  background: #f0f0f0;
+}

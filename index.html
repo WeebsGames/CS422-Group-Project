@@ -187,6 +187,95 @@
       </div>
     </main>
 
+    <!-- Create Group Page -->
+    <main class="create-group-page page" id="page-create-group" style="display:none;">
+      <div class="create-group-header">
+        <div class="create-group-header-left">
+          <button class="back-btn" id="create-group-back-btn" aria-label="Go back">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          </button>
+          <h2 class="create-group-title">Create Group</h2>
+        </div>
+        <button class="create-group-btn" id="submit-create-group-btn">Create Group</button>
+      </div>
+
+      <hr class="section-divider" />
+
+      <div class="create-group-content">
+        <div class="create-group-left">
+          <div class="cg-field">
+            <label class="cg-label" for="cg-name">Name</label>
+            <input type="text" id="cg-name" class="cg-input" placeholder="Group name" />
+          </div>
+          <div class="cg-field">
+            <label class="cg-label" for="cg-location">Location</label>
+            <input type="text" id="cg-location" class="cg-input" placeholder="Location" />
+          </div>
+          <div class="cg-field">
+            <label class="cg-label" for="cg-description">Description</label>
+            <input type="text" id="cg-description" class="cg-input" placeholder="Description" />
+          </div>
+
+          <div class="cg-tags-section">
+            <h3 class="cg-section-title">Tags</h3>
+            <div class="cg-tag-list">
+              <button class="cg-tag" data-value="Casual">Casual</button>
+              <button class="cg-tag" data-value="Serious">Serious</button>
+              <button class="cg-tag" data-value="Beginner-Friendly">Beginner-Friendly</button>
+              <button class="cg-tag" data-value="Experienced Only">Experienced Only</button>
+              <button class="cg-tag" data-value="Other">Other</button>
+            </div>
+          </div>
+
+          <div class="cg-members-section">
+            <h3 class="cg-section-title">Add Members</h3>
+            <div class="cg-search-wrapper">
+              <input type="text" class="cg-search-input" placeholder="Search for players" />
+              <svg class="cg-search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="create-group-right">
+          <h3 class="cg-section-title cg-center">Add Dates</h3>
+          <div class="cg-calendar-placeholder">
+            <div class="cg-calendar-header">
+              <span>&lt;</span>
+              <span>Sep ▾</span>
+              <span>2026 ▾</span>
+              <span>&gt;</span>
+            </div>
+            <div class="cg-calendar-grid">
+              <div class="cg-cal-day-label">Su</div>
+              <div class="cg-cal-day-label">Mo</div>
+              <div class="cg-cal-day-label">Tu</div>
+              <div class="cg-cal-day-label">We</div>
+              <div class="cg-cal-day-label">Th</div>
+              <div class="cg-cal-day-label">Fr</div>
+              <div class="cg-cal-day-label">Sa</div>
+              <div></div><div></div><div></div><div></div><div></div><div></div><div class="cg-cal-day">1</div>
+              <div class="cg-cal-day">2</div><div class="cg-cal-day">3</div><div class="cg-cal-day">4</div><div class="cg-cal-day">5</div><div class="cg-cal-day">6</div><div class="cg-cal-day">7</div><div class="cg-cal-day">8</div>
+              <div class="cg-cal-day">9</div><div class="cg-cal-day">10</div><div class="cg-cal-day">11</div><div class="cg-cal-day">12</div><div class="cg-cal-day">13</div><div class="cg-cal-day">14</div><div class="cg-cal-day">15</div>
+              <div class="cg-cal-day">16</div><div class="cg-cal-day">17</div><div class="cg-cal-day">18</div><div class="cg-cal-day">19</div><div class="cg-cal-day">20</div><div class="cg-cal-day">21</div><div class="cg-cal-day">22</div>
+              <div class="cg-cal-day">23</div><div class="cg-cal-day">24</div><div class="cg-cal-day">25</div><div class="cg-cal-day">26</div><div class="cg-cal-day">27</div><div class="cg-cal-day">28</div><div class="cg-cal-day">29</div>
+              <div class="cg-cal-day">30</div>
+            </div>
+          </div>
+
+          <h3 class="cg-section-title cg-center cg-mt">Session Length (in hours)</h3>
+          <div class="cg-session-length">
+            <span class="cg-arrow">←</span>
+            <button class="cg-length-btn">1</button>
+            <button class="cg-length-btn">2</button>
+            <button class="cg-length-btn">3</button>
+            <button class="cg-length-btn">4</button>
+            <button class="cg-length-btn">5</button>
+            <span class="cg-arrow">→</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
     <!-- My Group page -->
     <main class="group-page page" id="page-group" style="display:none;">
     </main>
@@ -196,8 +285,7 @@
     </main>
 
     <!-- Group chat -->
-    <main>
-
+    <main class="chat-page page" id="page-chat" style="display:none;">
     </main>
 
     <!-- Selection Overlay -->
