@@ -887,6 +887,7 @@ function goToSearch() {
 function wireEvents() {
   // Nav search — clicking goes to search page
   els.navSearch.addEventListener("focus", () => {
+    state.filters.active = [];
     goToSearch();
   });
 
@@ -990,6 +991,7 @@ function wireEvents() {
 
   // Nav buttons
   els.myGroupsBtn.addEventListener("click", () => {
+    state.filters.active = [];
     state.page = "myGroups";
     render();
   });
