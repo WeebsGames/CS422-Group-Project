@@ -179,6 +179,7 @@ const state = {
   filters: {
     active: [],   // applied filters shown in filter bar
     pending: [],  // selections on filter page before Apply
+    fromPage: "search",
   },
   group: {
     selectedGroup: null,
@@ -323,14 +324,26 @@ function render() {
 }
 
 function renderMyGroups() {
-  const joined = state.joinedGroupIds
+  let joined = state.joinedGroupIds
     .map(id => LISTINGS.find(l => l.id === id))
     .filter(Boolean);
+
+  if (state.filters.active.length > 0) {
+    joined = joined.filter((l) =>
+      state.filters.active.some((tag) => l.tags.includes(tag))
+    );
+  }
+
+  const emptyMessage = joined.length === 0
+    ? state.filters.active.length > 0
+      ? "No joined groups match your filters."
+      : "You haven't joined any groups yet. Find one on the search page!"
+    : "";
 
   els.pageGroupListing.innerHTML = `
     <div class="my-groups-header">
       <h1 class="my-groups-title">My Groups</h1>
-      <button class="filter-btn">
+      <button class="filter-btn" id="my-groups-filter-btn" aria-label="Open filters">
         <svg xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -341,7 +354,7 @@ function renderMyGroups() {
 
     <div class="my-groups-list">
       ${joined.length === 0 ? `
-        <p class="my-groups-empty">You haven't joined any groups yet. Find one on the search page!</p>
+        <p class="my-groups-empty">${emptyMessage}</p>
       ` : joined.map(group => `
         <div class="my-group-card" data-id="${group.id}">
           <div class="my-group-left">
@@ -372,6 +385,16 @@ function renderMyGroups() {
       render();
     });
   });
+
+  const myGroupsFilterBtn = document.getElementById("my-groups-filter-btn");
+  if (myGroupsFilterBtn) {
+    myGroupsFilterBtn.addEventListener("click", () => {
+      state.filters.pending = [...state.filters.active];
+      state.filters.fromPage = "myGroups";
+      state.page = "filters";
+      render();
+    });
+  }
 }
 
 function renderGroup() {
@@ -914,20 +937,21 @@ function wireEvents() {
   // Open filter page
   els.filterIconBtn.addEventListener("click", () => {
     state.filters.pending = [...state.filters.active]; // copy current active into pending
+    state.filters.fromPage = "search";
     state.page = "filters";
     render();
   });
 
   // Filter back button (discard changes)
   els.filterBackBtn.addEventListener("click", () => {
-    state.page = "search";
+    state.page = state.filters.fromPage || "search";
     render();
   });
 
   // Apply filters
   els.applyFiltersBtn.addEventListener("click", () => {
     state.filters.active = [...state.filters.pending];
-    state.page = "search";
+    state.page = state.filters.fromPage || "search";
     render();
   });
 
