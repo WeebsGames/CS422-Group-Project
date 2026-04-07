@@ -1,3 +1,6 @@
+
+view: https://asilv5.github.io/CS422-Group-Project/
+
 GR4: Computer Prototyping
 In this group assignment, you will do the first computer-based implementation of your term project.
 You may want to use a prototyping tool for this assignment, such as an HTML editor. You don't necessarily have to throw this prototype away, so you can choose a tool that will produce code you can use in your final implementation. But you shouldn't get too attached to this prototype either, and be prepared to make radical changes or throw it away if the evaluation reveals serious usability problems.
