@@ -183,6 +183,24 @@ const state = {
   group: {
     selectedGroup: null,
   },
+  chat: {
+    // Keyed by group id. Each entry is an array of {sender, text, isMine}
+    messagesByGroupId: {
+      1: [
+        { sender: "DarkLord69", text: "Welcome.", isMine: false, isDM: true },
+      ],
+      2: [
+        { sender: "SirLancelot", text: "Welcome", isMine: false, isDM: true },
+      ],
+      3: [
+        { sender: "CosmicDM", text: "Welcome", isMine: false, isDM: true },
+      ],
+      6: [
+        { sender: "Narrator", text: "Welcome", isMine: false, isDM: true },
+      ],
+    },
+  },
+  joinedGroupIds: [2, 3, 6],
   
 };
 
@@ -198,6 +216,8 @@ const els = {
   pageSearch: document.querySelector("#page-search"),
   pageFilters: document.querySelector("#page-filters"),
   pageProfile: document.querySelector("#page-profile"),
+  pageCreateGroup: document.querySelector("#page-create-group"),
+  createGroupBackBtn: document.querySelector("#create-group-back-btn"),
   listingsPanel: document.querySelector("#listings-panel"),
   detailPanel: document.querySelector("#detail-panel"),
   filterTags: document.querySelector("#filter-tags"),
@@ -213,6 +233,9 @@ const els = {
   displayRole: document.querySelector("#display-role"),
   pageGroup: document.querySelector("#page-group"),
   pageGroupListing: document.querySelector("#group-listing"),
+  pageChat: document.querySelector("#page-chat"),
+  navLogo: document.querySelector(".nav-logo"),
+  logoFallback: document.querySelector("#logo-fallback"),
 };
 
 // --- Field display names ---
@@ -233,8 +256,10 @@ function render() {
   els.pageSearch.style.display = state.page === "search" ? "block" : "none";
   els.pageFilters.style.display = state.page === "filters" ? "block" : "none";
   els.pageProfile.style.display = state.page === "profile" ? "block" : "none";
+  els.pageCreateGroup.style.display = state.page === "createGroup" ? "block" : "none";
   els.pageGroup.style.display = state.page === "group" ? "block" : "none";
   els.pageGroupListing.style.display = state.page === "myGroups" ? "block" : "none";
+  els.pageChat.style.display = state.page === "chat" ? "flex" : "none";
 
   // Sync search
   els.navSearch.value = state.query;
@@ -262,6 +287,11 @@ function render() {
   // Render my groups page
   if (state.page === "myGroups") {
     renderMyGroups();
+  }
+
+  // Render chat page
+  if (state.page === "chat") {
+    renderChat();
   }
 
   // Update profile display values
@@ -293,6 +323,10 @@ function render() {
 }
 
 function renderMyGroups() {
+  const joined = state.joinedGroupIds
+    .map(id => LISTINGS.find(l => l.id === id))
+    .filter(Boolean);
+
   els.pageGroupListing.innerHTML = `
     <div class="my-groups-header">
       <h1 class="my-groups-title">My Groups</h1>
@@ -306,7 +340,9 @@ function renderMyGroups() {
     </div>
 
     <div class="my-groups-list">
-      ${LISTINGS.slice(0, 2).map(group => `
+      ${joined.length === 0 ? `
+        <p class="my-groups-empty">You haven't joined any groups yet. Find one on the search page!</p>
+      ` : joined.map(group => `
         <div class="my-group-card" data-id="${group.id}">
           <div class="my-group-left">
             <h3>${group.name}</h3>
@@ -352,7 +388,7 @@ function renderGroup() {
       </button>
       <h2 class="group-title">${group.name}</h2>
       <div class="group-actions">
-        <button class="icon-btn">
+        <button class="icon-btn" id="group-chat-btn">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path d="M17 21v-2a4 4 0 0 0-3-3.87"/>
             <path d="M7 21v-2a4 4 0 0 1 3-3.87"/>
@@ -445,6 +481,161 @@ function renderGroup() {
     state.page = "myGroups";
     render();
   });
+
+  // chat button → go to chat page for this group
+  document.getElementById("group-chat-btn").addEventListener("click", () => {
+    state.page = "chat";
+    render();
+  });
+}
+
+function ensureChatExists(groupId, dmName = "DM") {
+  if (!state.chat.messagesByGroupId) {
+    state.chat.messagesByGroupId = {};
+  }
+
+  if (!state.chat.messagesByGroupId[groupId]) {
+    state.chat.messagesByGroupId[groupId] = [
+      {
+        sender: dmName,
+        text: "Welcome.",
+        isMine: false,
+        isDM: true,
+      },
+    ];
+  }
+}
+
+function initializeAllChats() {
+  LISTINGS.forEach(group => {
+    ensureChatExists(group.id, group.dm);
+  });
+}
+
+// --- Render Chat ---
+function renderChat() {
+  const group = state.group.selectedGroup;
+  if (!group) return;
+
+  // Ensure a message array exists for this group
+  if (!state.chat.messagesByGroupId[group.id]) {
+    state.chat.messagesByGroupId[group.id] = [];
+  }
+  const messages = state.chat.messagesByGroupId[group.id];
+
+  const avatarSvg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <circle cx="12" cy="8" r="4"/>
+      <path d="M20 21a8 8 0 1 0-16 0"/>
+    </svg>
+  `;
+
+  els.pageChat.innerHTML = `
+    <div class="group-header">
+      <button class="back-btn" id="chat-back-btn" aria-label="Go back">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+      </button>
+      <h2 class="group-title">${group.name}</h2>
+      <div class="group-actions">
+        <button class="icon-btn" aria-label="Members">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M17 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M7 21v-2a4 4 0 0 1 3-3.87"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </button>
+        <button class="icon-btn" id="chat-video-btn" aria-label="Video call">
+          <svg xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="15" height="10" rx="2"/>
+            <polygon points="17 12 22 9 22 15 17 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chat-messages">
+      ${messages.map(m => `
+        <div class="chat-msg ${m.isMine ? "mine" : "theirs"}">
+          <div class="chat-avatar">
+            ${m.isDM ? '<span class="crown">👑</span>' : ""}
+            ${avatarSvg}
+          </div>
+          <div class="chat-bubble">${escapeHtml(m.text)}</div>
+        </div>
+      `).join("")}
+    </div>
+
+    <div class="chat-input-bar">
+      <button class="chat-plus-btn" aria-label="Add">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+      </button>
+      <input type="text" class="chat-text-input" id="chat-text-input" placeholder="Send message" />
+      <button class="chat-send-btn" id="chat-send-btn" aria-label="Send">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+  `;
+
+  // Scroll to bottom
+  const msgsEl = document.getElementById("chat-messages");
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+
+  // Back → group page
+  document.getElementById("chat-back-btn").addEventListener("click", () => {
+    state.page = "group";
+    render();
+  });
+
+  // Video call → does nothing for now (placeholder)
+  document.getElementById("chat-video-btn").addEventListener("click", () => {
+    // intentionally no-op for prototype
+  });
+
+  // Send message
+  const input = document.getElementById("chat-text-input");
+  const sendBtn = document.getElementById("chat-send-btn");
+
+  function sendMessage() {
+    const text = input.value.trim();
+    if (!text) return;
+    state.chat.messagesByGroupId[group.id].push({
+      sender: state.profile.name || "You",
+      text,
+      isMine: true,
+      isDM: false,
+    });
+    render();
+  }
+
+  sendBtn.addEventListener("click", sendMessage);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+}
+
+// Tiny HTML escape helper for chat messages
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 // --- Render Listings ---
@@ -503,6 +694,7 @@ function renderDetail() {
 
   // Build member circles (grey dots)
   const memberCircles = listing.members.map(() => `<span class="member-circle"></span>`).join("");
+  const isJoined = state.joinedGroupIds.includes(listing.id);
 
   els.detailPanel.innerHTML = `
     <h2 class="detail-name">${listing.name}</h2>
@@ -535,9 +727,21 @@ function renderDetail() {
       <span class="detail-value">${listing.experience}</span>
     </div>
     <div class="detail-action">
-      <button class="request-join-btn">Request to join</button>
+      <button class="request-join-btn" id="request-join-btn" ${isJoined ? "disabled" : ""}>
+        ${isJoined ? "Joined ✓" : "Request to join"}
+      </button>
     </div>
   `;
+
+  const joinBtn = document.getElementById("request-join-btn");
+  if (joinBtn && !isJoined) {
+    joinBtn.addEventListener("click", () => {
+      if (!state.joinedGroupIds.includes(listing.id)) {
+        state.joinedGroupIds.push(listing.id);
+      }
+      render();
+    });
+  }
 }
 
 // --- Render Overlay ---
@@ -742,6 +946,21 @@ function wireEvents() {
     });
   });
 
+  // Logo click → go home
+  function goHome() {
+    state.page = "home";
+    state.query = "";
+    render();
+  }
+  if (els.navLogo) {
+    els.navLogo.style.cursor = "pointer";
+    els.navLogo.addEventListener("click", goHome);
+  }
+  if (els.logoFallback) {
+    els.logoFallback.style.cursor = "pointer";
+    els.logoFallback.addEventListener("click", goHome);
+  }
+
   // Nav buttons
   els.myGroupsBtn.addEventListener("click", () => {
     state.page = "myGroups";
@@ -749,9 +968,17 @@ function wireEvents() {
   });
 
   els.createBtn.addEventListener("click", () => {
-    console.log("Navigate to Create Group");
+    state.page = "createGroup";
+    render();
+  });
+
+  // Create group back button
+  els.createGroupBackBtn.addEventListener("click", () => {
+    state.page = "home";
+    render();
   });
 }
 
 wireEvents();
+initializeAllChats();
 render();
