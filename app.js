@@ -202,7 +202,6 @@ const state = {
     },
   },
   joinedGroupIds: [2, 3, 6],
-  
 };
 
 // --- Element References ---
@@ -250,6 +249,28 @@ const FIELD_LABELS = {
   schedule: "Schedule",
 };
 
+// --- Helpers ---
+function listingMatchesSearch(listing, query) {
+  if (!query) return true;
+
+  const searchableText = [
+    listing.name,
+    listing.description,
+    listing.dm,
+    listing.location,
+    listing.schedule,
+    listing.commitment,
+    listing.playStyle,
+    listing.experience,
+    ...(listing.tags || []),
+    ...(listing.members || []),
+  ]
+    .join(" ")
+    .toLowerCase();
+
+  return searchableText.includes(query);
+}
+
 // --- Render ---
 function render() {
   // Show/hide pages
@@ -264,7 +285,7 @@ function render() {
 
   // Sync search
   els.navSearch.value = state.query;
-  if (state.page === "home") {
+  if (els.heroSearch) {
     els.heroSearch.value = state.query;
   }
 
@@ -324,10 +345,15 @@ function render() {
 }
 
 function renderMyGroups() {
-  //joined changes based on the filter selection
+  const query = state.query.trim().toLowerCase();
+
   let joined = state.joinedGroupIds
     .map(id => LISTINGS.find(l => l.id === id))
     .filter(Boolean);
+
+  if (query) {
+    joined = joined.filter((listing) => listingMatchesSearch(listing, query));
+  }
 
   if (state.filters.active.length > 0) {
     joined = joined.filter((l) =>
@@ -335,10 +361,9 @@ function renderMyGroups() {
     );
   }
 
-  //dynamic 'no groups' text
   const emptyMessage = joined.length === 0
-    ? state.filters.active.length > 0
-      ? "No joined groups match your filters."
+    ? state.filters.active.length > 0 || query
+      ? "No joined groups match your search or filters."
       : "You haven't joined any groups yet. Find one on the search page!"
     : "";
 
@@ -376,7 +401,6 @@ function renderMyGroups() {
     </div>
   `;
 
-  // open group
   document.querySelectorAll(".my-group-card").forEach(card => {
     card.addEventListener("click", () => {
       const id = Number(card.getAttribute("data-id"));
@@ -388,7 +412,6 @@ function renderMyGroups() {
     });
   });
 
-  //filter button logic for myGroups page
   const myGroupsFilterBtn = document.getElementById("my-groups-filter-btn");
   if (myGroupsFilterBtn) {
     myGroupsFilterBtn.addEventListener("click", () => {
@@ -502,13 +525,11 @@ function renderGroup() {
     </div>
   `;
 
-  // back button
   document.getElementById("group-back-btn").addEventListener("click", () => {
     state.page = "myGroups";
     render();
   });
 
-  // chat button → go to chat page for this group
   document.getElementById("group-chat-btn").addEventListener("click", () => {
     state.page = "chat";
     render();
@@ -543,7 +564,6 @@ function renderChat() {
   const group = state.group.selectedGroup;
   if (!group) return;
 
-  // Ensure a message array exists for this group
   if (!state.chat.messagesByGroupId[group.id]) {
     state.chat.messagesByGroupId[group.id] = [];
   }
@@ -617,22 +637,18 @@ function renderChat() {
     </div>
   `;
 
-  // Scroll to bottom
   const msgsEl = document.getElementById("chat-messages");
   msgsEl.scrollTop = msgsEl.scrollHeight;
 
-  // Back → group page
   document.getElementById("chat-back-btn").addEventListener("click", () => {
     state.page = "group";
     render();
   });
 
-  // Video call → does nothing for now (placeholder)
   document.getElementById("chat-video-btn").addEventListener("click", () => {
     // intentionally no-op for prototype
   });
 
-  // Send message
   const input = document.getElementById("chat-text-input");
   const sendBtn = document.getElementById("chat-send-btn");
 
@@ -668,20 +684,22 @@ function escapeHtml(str) {
 function renderListings() {
   els.listingsPanel.innerHTML = "";
 
-  // Filter listings by active tags
-  let filtered = LISTINGS;
+  const query = state.query.trim().toLowerCase();
+
+  let filtered = LISTINGS.filter((listing) => listingMatchesSearch(listing, query));
+
   if (state.filters.active.length > 0) {
-    filtered = LISTINGS.filter((l) => {
+    filtered = filtered.filter((l) => {
       return state.filters.active.some((tag) => l.tags.includes(tag));
     });
   }
 
   if (filtered.length === 0) {
-    els.listingsPanel.innerHTML = '<div class="listings-empty">No groups match your filters.</div>';
+    state.search.selectedListingId = null;
+    els.listingsPanel.innerHTML = '<div class="listings-empty">No groups match your search or filters.</div>';
     return;
   }
 
-  // If selected listing isn't in filtered results, select the first one
   if (!filtered.find((l) => l.id === state.search.selectedListingId)) {
     state.search.selectedListingId = filtered[0].id;
   }
@@ -718,7 +736,6 @@ function renderDetail() {
     return;
   }
 
-  // Build member circles (grey dots)
   const memberCircles = listing.members.map(() => `<span class="member-circle"></span>`).join("");
   const isJoined = state.joinedGroupIds.includes(listing.id);
 
@@ -776,7 +793,6 @@ function renderOverlay() {
   els.overlayTitle.textContent = "Select " + FIELD_LABELS[field];
   els.overlayBody.innerHTML = "";
 
-  // Text input fields: name and location
   if (field === "name" || field === "location") {
     els.overlayTitle.textContent = "Enter " + FIELD_LABELS[field];
 
@@ -808,7 +824,6 @@ function renderOverlay() {
     return;
   }
 
-  // Button-select fields
   const options = OPTIONS[field];
   if (!options) return;
 
@@ -863,10 +878,8 @@ function renderFilterBar() {
 
 // --- Render Filter Page ---
 function renderFilterPage() {
-  // Update count
   els.filterSelectionCount.textContent = state.filters.pending.length + " / 4 selected";
 
-  // Update button states
   document.querySelectorAll("#page-filters .ftag").forEach((btn) => {
     const val = btn.getAttribute("data-value");
     if (state.filters.pending.includes(val)) {
@@ -885,7 +898,7 @@ function goToSearch() {
 
 // --- Event Listeners ---
 function wireEvents() {
-  // Nav search — clicking goes to search page
+  // Nav search
   els.navSearch.addEventListener("focus", () => {
     state.filters.active = [];
     goToSearch();
@@ -893,11 +906,23 @@ function wireEvents() {
 
   els.navSearch.addEventListener("input", (e) => {
     state.query = e.target.value;
+    if (state.page !== "search") {
+      state.page = "search";
+    }
+    render();
   });
 
-  // Hero search — clicking goes to search page
+  // Hero search
   els.heroSearch.addEventListener("focus", () => {
     goToSearch();
+  });
+
+  els.heroSearch.addEventListener("input", (e) => {
+    state.query = e.target.value;
+    if (state.page !== "search") {
+      state.page = "search";
+    }
+    render();
   });
 
   // Page navigation
@@ -937,59 +962,53 @@ function wireEvents() {
     }
   });
 
-  // --- Filter Page ---
-  // Open filter page
+  // Filter page
   els.filterIconBtn.addEventListener("click", () => {
-    state.filters.pending = [...state.filters.active]; // copy current active into pending
+    state.filters.pending = [...state.filters.active];
     state.filters.fromPage = "search";
     state.page = "filters";
     render();
   });
 
-  // Filter back button (discard changes)
   els.filterBackBtn.addEventListener("click", () => {
     state.page = state.filters.fromPage || "search";
     render();
   });
 
-  // Apply filters
   els.applyFiltersBtn.addEventListener("click", () => {
     state.filters.active = [...state.filters.pending];
     state.page = state.filters.fromPage || "search";
     render();
   });
 
-  // Filter tag selection (toggle)
   document.querySelectorAll("#page-filters .ftag").forEach((btn) => {
     btn.addEventListener("click", () => {
       const val = btn.getAttribute("data-value");
       if (state.filters.pending.includes(val)) {
-        // Deselect
         state.filters.pending = state.filters.pending.filter((t) => t !== val);
       } else if (state.filters.pending.length < 4) {
-        // Select (max 4)
         state.filters.pending.push(val);
       }
       renderFilterPage();
     });
   });
 
-  // Logo click → go home
   function goHome() {
     state.page = "home";
     state.query = "";
     render();
   }
+
   if (els.navLogo) {
     els.navLogo.style.cursor = "pointer";
     els.navLogo.addEventListener("click", goHome);
   }
+
   if (els.logoFallback) {
     els.logoFallback.style.cursor = "pointer";
     els.logoFallback.addEventListener("click", goHome);
   }
 
-  // Nav buttons
   els.myGroupsBtn.addEventListener("click", () => {
     state.filters.active = [];
     state.page = "myGroups";
@@ -1001,7 +1020,6 @@ function wireEvents() {
     render();
   });
 
-  // Create group back button
   els.createGroupBackBtn.addEventListener("click", () => {
     state.page = "home";
     render();
