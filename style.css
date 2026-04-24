@@ -935,6 +935,11 @@ body {
   padding: 20px;
   margin-bottom: 10px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.my-group-card:hover {
+  background-color: #f2f2f2;
 }
 
 .my-group-left {
@@ -943,6 +948,9 @@ body {
 
 .my-group-right ul {
   list-style: disc;
+}
+.my-groups-page {
+  padding: 20px 40px;
 }
 
 .filter-btn {
