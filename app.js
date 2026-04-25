@@ -360,6 +360,9 @@ function renderMyGroups() {
         <p class="my-groups-empty">${emptyMessage}</p>
       ` : joined.map(group => `
         <div class="my-group-card" data-id="${group.id}">
+          <button class="my-group-remove-btn" data-id="${group.id}" aria-label="Remove group">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
           <div class="my-group-left">
             <h3>${group.name}</h3>
             <p>${group.description}</p>
@@ -372,7 +375,9 @@ function renderMyGroups() {
               <li>${group.location === "Online" ? "Online" : "In-Person"}</li>
             </ul>
           </div>
+          
         </div>
+        
       `).join("")}
     </div>
   `;
@@ -385,6 +390,16 @@ function renderMyGroups() {
 
       state.group.selectedGroup = group;
       state.page = "group";
+      render();
+    });
+  });
+
+  // Remove group from My Groups
+  document.querySelectorAll(".my-group-remove-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const id = Number(btn.getAttribute("data-id"));
+      state.joinedGroupIds = state.joinedGroupIds.filter(gid => gid !== id);
       render();
     });
   });
