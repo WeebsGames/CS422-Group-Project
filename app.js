@@ -22,6 +22,8 @@ const OPTIONS = {
   ],
 };
 
+const TAGS_COLORS = ["ftag-teal", "ftag-mint", "ftag-orange", "ftag-brown", "ftag-yellow"];
+
 // --- Mock Listings Data ---
 const LISTINGS = [
   {
@@ -345,12 +347,8 @@ function renderMyGroups() {
   els.pageGroupListing.innerHTML = `
     <div class="my-groups-header">
       <h1 class="my-groups-title">My Groups</h1>
-      <button class="filter-btn" id="my-groups-filter-btn" aria-label="Open filters">
-        <svg xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-        </svg>
+      <button class="groups-filter-icon-btn" id="groups-filter-icon-btn" aria-label="Open filters">
+        <svg xmlns="http://www.w3.org/2000/svg" box-shadow="none" appearance="none" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
       </button>
     </div>
 
@@ -389,9 +387,9 @@ function renderMyGroups() {
   });
 
   //filter button logic for myGroups page
-  const myGroupsFilterBtn = document.getElementById("my-groups-filter-btn");
-  if (myGroupsFilterBtn) {
-    myGroupsFilterBtn.addEventListener("click", () => {
+  const FilterIconBtn = document.getElementById("groups-filter-icon-btn");
+  if (FilterIconBtn) {
+    FilterIconBtn.addEventListener("click", () => {
       state.filters.pending = [...state.filters.active];
       state.filters.fromPage = "myGroups";
       state.page = "filters";
@@ -440,7 +438,7 @@ function renderGroup() {
           <p>${group.description}</p>
 
           <div class="group-tags">
-            ${group.tags.map(t => `<span class="tag">${t}</span>`).join("")}
+            ${group.tags.map(t => `<span class="tag ${TAGS_COLORS[group.tags.indexOf(t) % TAGS_COLORS.length]}">${t}</span>`).join("")}
           </div>
         </section>
 
@@ -697,7 +695,7 @@ function renderListings() {
       <h3 class="listing-name">${listing.name}</h3>
       <p class="listing-desc">${listing.description}</p>
       <div class="listing-tags">
-        ${listing.tags.map((t) => `<span class="listing-tag">${t}</span>`).join("")}
+        ${listing.tags.map((t) => `<span class="listing-tag ${TAGS_COLORS[listing.tags.indexOf(t) % TAGS_COLORS.length]}">${t}</span>`).join("")}
       </div>
     `;
 

@@ -766,6 +766,10 @@ body {
   background: #00b4d8;
 }
 
+.ftag-mint {
+  background: #5ac5b3;
+}
+
 .ftag-orange {
   background: #f5920a;
 }
@@ -953,19 +957,14 @@ body {
   padding: 20px 40px;
 }
 
-.filter-btn {
-  background: none;
+.groups-filter-icon-btn {
+  background: transparent;
   border: none;
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0;
   cursor: pointer;
-  padding: 6px;
-  fill: none;
-  stroke: currentColor;
-  margin-right: 30px;
-}
-
-.filter-btn svg {
-  width: 40px;
-  height: 40px;
 }
 
 .my-groups-title {
