@@ -472,21 +472,20 @@ body {
   white-space: nowrap;
 }
 
-.filter-tags {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  flex: 1;
-}
-
 .filter-icon-btn {
-  margin-left: auto;
   background: none;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   padding: 0.25rem;
+}
+
+.filter-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  flex: 1;
 }
 
 .filter-icon-btn:hover {
