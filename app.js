@@ -837,12 +837,43 @@ function openOverlay(field) {
   render();
 }
 
+// --- Get color class for a filter tag ---
+function getFilterColorClass(tag) {
+  const categoryColors = {
+    // Experience
+    "Beginner": "ftag-teal",
+    "Intermediate": "ftag-teal",
+    "Advanced": "ftag-teal",
+    "Expert": "ftag-teal",
+    // Length
+    "≤ 1 hour": "ftag-mint",
+    "1-2 hours": "ftag-mint",
+    "2-3 hours": "ftag-mint",
+    "3-5 hours": "ftag-mint",
+    // Frequency
+    "Daily": "ftag-orange",
+    "Weekly": "ftag-orange",
+    "Bi-weekly": "ftag-orange",
+    "Monthly": "ftag-orange",
+    // Edition
+    "5e (5th Edition)": "ftag-brown",
+    "3.5e": "ftag-brown",
+    "Pathfinder 1e/2e": "ftag-brown",
+    // Distance
+    "≤ 1 mile away": "ftag-yellow",
+    "1-2 miles away": "ftag-yellow",
+    "2-5 miles away": "ftag-yellow",
+    "5-10 miles away": "ftag-yellow",
+  };
+  return categoryColors[tag] || "ftag-teal";
+}
+
 // --- Render Filter Bar (tags on search page) ---
 function renderFilterBar() {
   els.filterTags.innerHTML = "";
   state.filters.active.forEach((tag) => {
     const span = document.createElement("span");
-    span.className = "filter-bar-tag";
+    span.className = "filter-bar-tag " + getFilterColorClass(tag);
     span.textContent = tag;
 
     const removeBtn = document.createElement("span");
