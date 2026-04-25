@@ -22,6 +22,8 @@ const OPTIONS = {
   ],
 };
 
+const TAGS_COLORS = ["ftag-teal", "ftag-mint", "ftag-orange", "ftag-brown", "ftag-yellow"];
+
 // --- Mock Listings Data ---
 const LISTINGS = [
   {
@@ -436,7 +438,7 @@ function renderGroup() {
           <p>${group.description}</p>
 
           <div class="group-tags">
-            ${group.tags.map(t => `<span class="tag">${t}</span>`).join("")}
+            ${group.tags.map(t => `<span class="tag ${TAGS_COLORS[group.tags.indexOf(t) % TAGS_COLORS.length]}">${t}</span>`).join("")}
           </div>
         </section>
 
@@ -693,7 +695,7 @@ function renderListings() {
       <h3 class="listing-name">${listing.name}</h3>
       <p class="listing-desc">${listing.description}</p>
       <div class="listing-tags">
-        ${listing.tags.map((t) => `<span class="listing-tag">${t}</span>`).join("")}
+        ${listing.tags.map((t) => `<span class="listing-tag ${TAGS_COLORS[listing.tags.indexOf(t) % TAGS_COLORS.length]}">${t}</span>`).join("")}
       </div>
     `;
 
