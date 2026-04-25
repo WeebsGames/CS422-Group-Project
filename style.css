@@ -937,8 +937,24 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   border-bottom: 2px solid black;
   padding-bottom: 10px;
+  padding-right: 10px;
+}
+
+.my-groups-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.my-groups-filter-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  flex: 1;
+  justify-content: flex-end;
 }
 
 .group-members {
