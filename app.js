@@ -358,10 +358,13 @@ function renderMyGroups() {
 
   els.pageGroupListing.innerHTML = `
     <div class="my-groups-header">
+      <div class="my-groups-header-left">
+        <button class="groups-filter-icon-btn" id="groups-filter-icon-btn" aria-label="Open filters">
+          <svg xmlns="http://www.w3.org/2000/svg" box-shadow="none" appearance="none" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        </button>
+        <div class="my-groups-filter-tags" id="my-groups-filter-tags"></div>
+      </div>
       <h1 class="my-groups-title">My Groups</h1>
-      <button class="groups-filter-icon-btn" id="groups-filter-icon-btn" aria-label="Open filters">
-        <svg xmlns="http://www.w3.org/2000/svg" box-shadow="none" appearance="none" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-      </button>
     </div>
 
     <div class="my-groups-list">
@@ -369,6 +372,9 @@ function renderMyGroups() {
         <p class="my-groups-empty">${emptyMessage}</p>
       ` : joined.map(group => `
         <div class="my-group-card" data-id="${group.id}">
+          <button class="my-group-remove-btn" data-id="${group.id}" aria-label="Remove group">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
           <div class="my-group-left">
             <h3>${group.name}</h3>
             <p>${group.description}</p>
@@ -381,7 +387,9 @@ function renderMyGroups() {
               <li>${group.location === "Online" ? "Online" : "In-Person"}</li>
             </ul>
           </div>
+          
         </div>
+        
       `).join("")}
     </div>
   `;
@@ -398,6 +406,16 @@ function renderMyGroups() {
     });
   });
 
+  // Remove group from My Groups
+  document.querySelectorAll(".my-group-remove-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const id = Number(btn.getAttribute("data-id"));
+      state.joinedGroupIds = state.joinedGroupIds.filter(gid => gid !== id);
+      render();
+    });
+  });
+
   //filter button logic for myGroups page
   const FilterIconBtn = document.getElementById("groups-filter-icon-btn");
   if (FilterIconBtn) {
@@ -408,6 +426,9 @@ function renderMyGroups() {
       render();
     });
   }
+
+  // Render filter tags for My Groups page
+  renderMyGroupsFilterBar();
 }
 
 function renderGroup() {
@@ -899,6 +920,31 @@ function renderFilterBar() {
 
     span.appendChild(removeBtn);
     els.filterTags.appendChild(span);
+  });
+}
+
+// --- Render My Groups Filter Bar ---
+function renderMyGroupsFilterBar() {
+  const container = document.getElementById("my-groups-filter-tags");
+  if (!container) return;
+
+  container.innerHTML = "";
+  state.filters.active.forEach((tag) => {
+    const span = document.createElement("span");
+    span.className = "filter-bar-tag " + getFilterColorClass(tag);
+    span.textContent = tag;
+
+    const removeBtn = document.createElement("span");
+    removeBtn.className = "filter-bar-tag-remove";
+    removeBtn.textContent = "×";
+    removeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      state.filters.active = state.filters.active.filter((t) => t !== tag);
+      render();
+    });
+
+    span.appendChild(removeBtn);
+    container.appendChild(span);
   });
 }
 
