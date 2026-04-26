@@ -11,6 +11,38 @@ body {
   color: #222;
 }
 
+.hero-search-wrapper {
+  display: none;
+}
+
+/* === Homepage ===  */
+.home-buttons {
+  display: flex;
+  justify-content: center;  
+  align-items: center;
+  gap: 20px;                
+  margin-top: 25px;
+  width: 100%;
+}
+
+.home-btn {
+  padding: 0.8rem 4rem;     
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  border: none;
+  border-radius: 6px;       
+  background: #c00;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.home-btn:hover {
+  opacity: 0.9;
+}
+
+
+
 /* === Navbar === */
 .navbar {
   display: flex;
@@ -546,7 +578,7 @@ body {
   padding: 0.25rem 0.75rem;
   background: #f0f0f0;
   border-radius: 12px;
-  color: #444;
+  color: white;
 }
 
 .listings-empty {
@@ -612,18 +644,18 @@ body {
 
 .request-join-btn {
   padding: 0.6rem 2rem;
-  border: 1.5px solid #222;
+  border: 2.5px solid #222;
   border-radius: 6px;
   background: #fff;
   font-family: 'Lato', sans-serif;
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 1.2rem;
+  font-weight: 1000;
   cursor: pointer;
   transition: background 0.15s;
 }
 
 .request-join-btn:hover {
-  background: #f0f0f0;
+  background: #b8e6b8;
 }
 
 .detail-empty {
@@ -979,6 +1011,8 @@ body {
   margin-bottom: 10px;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  border-radius: 10px;
+  
 }
 
 .my-group-card:hover {

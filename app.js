@@ -239,7 +239,19 @@ const els = {
   pageChat: document.querySelector("#page-chat"),
   navLogo: document.querySelector(".nav-logo"),
   logoFallback: document.querySelector("#logo-fallback"),
+  homeFindGroupsBtn: document.querySelector("#home-find-groups-btn"),
+  homeMyGroupsBtn: document.querySelector("#home-my-groups-btn"),
 };
+
+// els.homeFindGroupsBtn.addEventListener("click", () => {
+//   state.page = "search";
+//   render();
+// });
+
+// els.homeMyGroupsBtn.addEventListener("click", () => {
+//   state.page = "myGroups";
+//   render();
+// });
 
 // --- Field display names ---
 const FIELD_LABELS = {
