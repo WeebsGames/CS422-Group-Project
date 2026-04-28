@@ -187,6 +187,7 @@ const state = {
     selectedGroup: null,
   },
   chat: {
+    videoActive: false,
     // Keyed by group id. Each entry is an array of {sender, text, isMine}
     messagesByGroupId: {
       1: [
@@ -243,15 +244,15 @@ const els = {
   homeMyGroupsBtn: document.querySelector("#home-my-groups-btn"),
 };
 
-// els.homeFindGroupsBtn.addEventListener("click", () => {
-//   state.page = "search";
-//   render();
-// });
+els.homeFindGroupsBtn.addEventListener("click", () => {
+  state.page = "search";
+  render();
+});
 
-// els.homeMyGroupsBtn.addEventListener("click", () => {
-//   state.page = "myGroups";
-//   render();
-// });
+els.homeMyGroupsBtn.addEventListener("click", () => {
+  state.page = "myGroups";
+  render();
+});
 
 // --- Field display names ---
 const FIELD_LABELS = {
@@ -588,63 +589,76 @@ function renderChat() {
   `;
 
   els.pageChat.innerHTML = `
-    <div class="group-header">
-      <button class="back-btn" id="chat-back-btn" aria-label="Go back">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <line x1="19" y1="12" x2="5" y2="12"/>
-          <polyline points="12 19 5 12 12 5"/>
-        </svg>
-      </button>
-      <h2 class="group-title">${group.name}</h2>
-      <div class="group-actions">
-        <button class="icon-btn" aria-label="Members">
+    <div class="chat-page">
+      <div class="group-header">
+        <button class="back-btn" id="chat-back-btn" aria-label="Go back">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M17 21v-2a4 4 0 0 0-3-3.87"/>
-            <path d="M7 21v-2a4 4 0 0 1 3-3.87"/>
-            <circle cx="12" cy="7" r="4"/>
+            <line x1="19" y1="12" x2="5" y2="12"/>
+            <polyline points="12 19 5 12 12 5"/>
           </svg>
         </button>
-        <button class="icon-btn" id="chat-video-btn" aria-label="Video call">
-          <svg xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="7" width="15" height="10" rx="2"/>
-            <polygon points="17 12 22 9 22 15 17 12"/>
-          </svg>
-        </button>
-      </div>
-    </div>
 
-    <div class="chat-messages" id="chat-messages">
-      ${messages.map(m => `
-        <div class="chat-msg ${m.isMine ? "mine" : "theirs"}">
-          <div class="chat-avatar">
-            ${m.isDM ? '<span class="crown">👑</span>' : ""}
-            ${avatarSvg}
-          </div>
-          <div class="chat-bubble">${escapeHtml(m.text)}</div>
+        <h2 class="group-title">${group.name}</h2>
+
+        <div class="group-actions">
+          <button class="icon-btn" aria-label="Members">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M17 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M7 21v-2a4 4 0 0 1 3-3.87"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </button>
+
+          <button class="icon-btn" id="chat-video-btn" aria-label="Video call">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="15" height="10" rx="2"/>
+              <polygon points="17 12 22 9 22 15 17 12"/>
+            </svg>
+          </button>
         </div>
-      `).join("")}
-    </div>
+      </div>
 
-    <div class="chat-input-bar">
-      <button class="chat-plus-btn" aria-label="Add">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-          <line x1="12" y1="5" x2="12" y2="19"/>
-          <line x1="5" y1="12" x2="19" y2="12"/>
-        </svg>
-      </button>
-      <input type="text" class="chat-text-input" id="chat-text-input" placeholder="Send message" />
-      <button class="chat-send-btn" id="chat-send-btn" aria-label="Send">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-          <line x1="22" y1="2" x2="11" y2="13"/>
-          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-        </svg>
-      </button>
+      <div class="chat-call-layout ${state.chat.videoActive ? "video-active" : ""}">
+        <section class="chat-panel">
+          <div class="chat-messages" id="chat-messages">
+            ${messages.map(m => `
+              <div class="chat-msg ${m.isMine ? "mine" : "theirs"}">
+                <div class="chat-avatar">
+                  ${m.isDM ? '<span class="crown">👑</span>' : ""}
+                  ${avatarSvg}
+                </div>
+                <div class="chat-bubble">${escapeHtml(m.text)}</div>
+              </div>
+            `).join("")}
+          </div>
+
+          <div class="chat-input-bar">
+            <button class="chat-plus-btn" aria-label="Add">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+
+            <input type="text" class="chat-text-input" id="chat-text-input" placeholder="Send message" />
+
+            <button class="chat-send-btn" id="chat-send-btn" aria-label="Send">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+          </div>
+        </section>
+
+        ${state.chat.videoActive ? renderVideoCall(group, avatarSvg) : ""}
+      </div>
     </div>
   `;
 
@@ -654,6 +668,7 @@ function renderChat() {
 
   // Back → group page
   document.getElementById("chat-back-btn").addEventListener("click", () => {
+    state.chat.videoActive = false;
     state.page = "group";
     render();
   });
@@ -661,7 +676,18 @@ function renderChat() {
   // Video call → does nothing for now (placeholder)
   document.getElementById("chat-video-btn").addEventListener("click", () => {
     // intentionally no-op for prototype
+    state.chat.videoActive = true;
+    render();
   });
+
+  const endCallBtn = document.getElementById("end-call-btn");
+
+  if (endCallBtn) {
+    endCallBtn.addEventListener("click", () => {
+      state.chat.videoActive = false;
+      render();
+    });
+  }
 
   // Send message
   const input = document.getElementById("chat-text-input");
@@ -693,6 +719,48 @@ function escapeHtml(str) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+function renderVideoCall(group, avatarSvg) {
+  const people = [
+    { name: group.dm, isDM: true },
+    ...group.members.map(m => ({ name: m, isDM: false }))
+  ].slice(0, 3);
+
+  return `
+    <section class="video-panel">
+      <div class="video-grid">
+        ${people.map(person => `
+          <div class="video-card">
+            ${person.isDM ? `<span class="video-crown">👑</span>` : ""}
+            <div class="video-avatar">${avatarSvg}</div>
+          </div>
+        `).join("")}
+      </div>
+
+      <div class="video-controls">
+        <button class="video-control-btn" aria-label="Microphone">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="22"/>
+            <line x1="8" y1="22" x2="16" y2="22"/>
+          </svg>
+        </button>
+
+        <button class="video-control-btn" aria-label="Camera">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <rect x="2" y="7" width="15" height="10" rx="2"/>
+            <polygon points="17 12 22 9 22 15 17 12"/>
+          </svg>
+        </button>
+
+        <button class="video-end-btn" id="end-call-btn">
+          End
+        </button>
+      </div>
+    </section>
+  `;
 }
 
 // --- Render Listings ---
