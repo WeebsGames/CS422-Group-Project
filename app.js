@@ -852,6 +852,7 @@ function renderDetail() {
       <span class="detail-value">${listing.experience}</span>
     </div>
     <div class="detail-action">
+      ${isJoined ? `<button class="leave-group-btn" id="leave-group-btn">Leave Group</button>` : ""}
       <button class="request-join-btn" id="request-join-btn" ${isJoined ? "disabled" : ""}>
         ${isJoined ? "Joined ✓" : "Request to join"}
       </button>
@@ -864,6 +865,15 @@ function renderDetail() {
       if (!state.joinedGroupIds.includes(listing.id)) {
         state.joinedGroupIds.push(listing.id);
       }
+      render();
+    });
+  }
+
+  // Leave group button handler
+  const leaveBtn = document.getElementById("leave-group-btn");
+  if (leaveBtn) {
+    leaveBtn.addEventListener("click", () => {
+      state.joinedGroupIds = state.joinedGroupIds.filter(id => id !== listing.id);
       render();
     });
   }
