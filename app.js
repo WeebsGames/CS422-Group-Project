@@ -775,6 +775,19 @@ function renderListings() {
     });
   }
 
+  // Filter by search query
+  if (state.query.trim()) {
+    const query = state.query.toLowerCase().trim();
+    filtered = filtered.filter((l) => {
+      return (
+        l.name.toLowerCase().includes(query) ||
+        l.description.toLowerCase().includes(query) ||
+        l.dm.toLowerCase().includes(query) ||
+        l.members.some(m => m.toLowerCase().includes(query))
+      );
+    });
+  }
+
   if (filtered.length === 0) {
     els.listingsPanel.innerHTML = '<div class="listings-empty">No groups match your filters.</div>';
     return;
@@ -1058,11 +1071,23 @@ function wireEvents() {
 
   els.navSearch.addEventListener("input", (e) => {
     state.query = e.target.value;
+    if (state.page !== "search") {
+      state.page = "search";
+    }
+    render();
   });
 
   // Hero search — clicking goes to search page
   els.heroSearch.addEventListener("focus", () => {
     goToSearch();
+  });
+
+  els.heroSearch.addEventListener("input", (e) => {
+    state.query = e.target.value;
+    if (state.page !== "search") {
+      state.page = "search";
+    }
+    render();
   });
 
   // Page navigation
