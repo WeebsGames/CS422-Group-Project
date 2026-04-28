@@ -188,6 +188,7 @@ const state = {
   },
   chat: {
     videoActive: false,
+    fromPage: null, // tracks which page the chat was opened from: "group" or "myGroups"
     // Keyed by group id. Each entry is an array of {sender, text, isMine}
     messagesByGroupId: {
       1: [
@@ -382,6 +383,14 @@ function renderMyGroups() {
           </div>
 
           <div class="my-group-right">
+            <button class="my-group-chat-btn" data-id="${group.id}" aria-label="Open chat">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M7 21v-2a4 4 0 0 1 3-3.87"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              Chat
+            </button>
             <ul>
               <li>${group.experience === "Veteran" ? "Experienced Only" : group.experience}</li>
               <li>${group.commitment}</li>
@@ -413,6 +422,19 @@ function renderMyGroups() {
       e.stopPropagation();
       const id = Number(btn.getAttribute("data-id"));
       state.joinedGroupIds = state.joinedGroupIds.filter(gid => gid !== id);
+      render();
+    });
+  });
+
+  // Open chat for a group
+  document.querySelectorAll(".my-group-chat-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const id = Number(btn.getAttribute("data-id"));
+      const group = LISTINGS.find(l => l.id === id);
+      state.group.selectedGroup = group;
+      state.chat.fromPage = "myGroups";
+      state.page = "chat";
       render();
     });
   });
@@ -542,6 +564,7 @@ function renderGroup() {
 
   // chat button → go to chat page for this group
   document.getElementById("group-chat-btn").addEventListener("click", () => {
+    state.chat.fromPage = "group";
     state.page = "chat";
     render();
   });
@@ -666,10 +689,10 @@ function renderChat() {
   const msgsEl = document.getElementById("chat-messages");
   msgsEl.scrollTop = msgsEl.scrollHeight;
 
-  // Back → group page
+  // Back → previous page (group or myGroups)
   document.getElementById("chat-back-btn").addEventListener("click", () => {
     state.chat.videoActive = false;
-    state.page = "group";
+    state.page = state.chat.fromPage === "myGroups" ? "myGroups" : "group";
     render();
   });
 
